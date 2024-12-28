@@ -1,22 +1,23 @@
-const express = require('express');
-const app = express();
-const port = 3000;
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Login from './pages/Login';
+import OAuthSuccess from './pages/OAuthSuccess';
+import Dashboard from './pages/Dashboard'; // Assume you have a Dashboard component
 
-// Middleware to parse JSON bodies
-app.use(express.json());
+function App() {
+    return (
+        <AuthProvider>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<Login />} />
+                    <Route path="/oauth-success" element={<OAuthSuccess />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    {/* Add more routes as needed */}
+                </Routes>
+            </Router>
+        </AuthProvider>
+    );
+}
 
-// Basic route
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
-// Example of a POST route
-app.post('/data', (req, res) => {
-  const data = req.body;
-  res.json({ message: 'Data received', data });
-});
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+export default App;
