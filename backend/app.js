@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const session = require('cookie-session');
 const passport = require('passport');
 const dotenv = require('dotenv');
@@ -8,10 +9,18 @@ require('./config/passport'); // Import Passport configuration
 
 const app = express();
 
+// Configure CORS
+app.use(cors({
+    origin: 'http://localhost:3000', // Allow requests from your frontend
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+}));
+
 app.use(express.json());
 app.use(session({
-    maxAge: 24 * 60 * 60 * 1000,
-    keys: [process.env.JWT_SECRET],
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    keys: [process.env.JWT_SECRET], // Use a secure key
+    secure: false, // Set to true if using HTTPS
+    httpOnly: true, // Helps prevent XSS attacks
 }));
 
 app.use(passport.initialize());
